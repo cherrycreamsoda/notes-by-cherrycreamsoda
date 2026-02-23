@@ -80,9 +80,7 @@ const webTransition = (property) =>
 const styles = StyleSheet.create({
   outer: {
     flex: 1,
-    backgroundColor: '#0e0e0e',
-    borderWidth: 2,
-    borderColor: '#ff00ff',
+    backgroundColor: '#111111',
   },
 
   controls: {
@@ -98,9 +96,7 @@ const styles = StyleSheet.create({
   topbar: {
     width: '100%',
     height: TOPBAR_HEIGHT,
-    backgroundColor: '#ffaa00',
-    borderWidth: 2,
-    borderColor: '#00ffff',
+    backgroundColor: '#111111',
     overflow: 'hidden',
     ...webTransition('height'),
   },
@@ -113,16 +109,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     position: 'relative',
-    borderWidth: 2,
-    borderColor: '#ffff00',
   },
 
   sidebar: {
     height: '100%',
     width: SIDEBAR_WIDTH,
-    backgroundColor: '#ff0000',
-    borderWidth: 2,
-    borderColor: '#0000ff',
+    backgroundColor: '#111111',
     overflow: 'hidden',
     ...webTransition('width'),
   },
@@ -142,11 +134,12 @@ const styles = StyleSheet.create({
   },
 
   editor: {
-    height: '100%',
     flex: 1,
-    backgroundColor: '#00ffa2',
-    borderWidth: 2,
-    borderColor: '#ff8800',
+    margin: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#222222',
+    backgroundColor: '#121212',
   },
 
   btn: {
