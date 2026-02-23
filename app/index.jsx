@@ -1,22 +1,21 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
-  StyleSheet,
-  Text,
   View,
-  TouchableOpacity,
   LayoutAnimation,
   Platform,
   UIManager,
   useWindowDimensions,
 } from 'react-native'
+import { TABLET_BREAKPOINT } from '@/constants/theme'
+import ControlBar from '@/components/ControlBar'
+import Topbar from '@/components/Topbar'
+import Sidebar from '@/components/Sidebar'
+import Editor from '@/components/Editor'
+import styles from './index.styles'
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true)
 }
-
-const SIDEBAR_WIDTH = 200
-const TOPBAR_HEIGHT = 40
-const TABLET_BREAKPOINT = 768
 
 const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -36,124 +35,19 @@ const Home = () => {
 
   return (
     <View style={styles.outer}>
-
-      {/* Controls — always visible */}
-      <View style={styles.controls}>
-        <TouchableOpacity onPress={toggleSidebar} style={styles.btn}>
-          <Text style={styles.btnText}>{sidebarOpen ? 'Close' : 'Open'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={toggleTopbar} style={styles.btn}>
-          <Text style={styles.btnText}>{topbarOpen ? 'Hide Bar' : 'Show Bar'}</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Topbar — always in normal flow, toggles height */}
-      <View style={[styles.topbar, !topbarOpen && styles.topbarClosed]} />
-
-      {/* Content area — sidebar + editor live here */}
+      <ControlBar
+        onToggleSidebar={toggleSidebar}
+        onToggleTopbar={toggleTopbar}
+        sidebarOpen={sidebarOpen}
+        topbarOpen={topbarOpen}
+      />
+      <Topbar isOpen={topbarOpen} />
       <View style={styles.content}>
-
-        {/* Sidebar — same element in both modes, only positioning changes */}
-        <View
-          style={[
-            styles.sidebar,
-            isTablet && styles.sidebarTablet,
-            !sidebarOpen && styles.sidebarClosed,
-          ]}
-        />
-
-        {/* Editor — always fills remaining space */}
-        <View style={styles.editor} />
-
+        <Sidebar isOpen={sidebarOpen} isTablet={isTablet} />
+        <Editor />
       </View>
     </View>
   )
 }
 
 export default Home
-
-const webTransition = (property) =>
-  Platform.select({
-    web: { transitionProperty: property, transitionDuration: '300ms' },
-  })
-
-const styles = StyleSheet.create({
-  outer: {
-    flex: 1,
-    backgroundColor: '#111111',
-  },
-
-  controls: {
-    flexDirection: 'row',
-    gap: 8,
-    padding: 8,
-    backgroundColor: '#1a1a1a',
-    borderWidth: 2,
-    borderColor: '#ffffff',
-    zIndex: 30,
-  },
-
-  topbar: {
-    width: '100%',
-    height: TOPBAR_HEIGHT,
-    backgroundColor: '#111111',
-    overflow: 'hidden',
-    ...webTransition('height'),
-  },
-
-  topbarClosed: {
-    height: 0,
-  },
-
-  content: {
-    flex: 1,
-    flexDirection: 'row',
-    position: 'relative',
-  },
-
-  sidebar: {
-    height: '100%',
-    width: SIDEBAR_WIDTH,
-    backgroundColor: '#111111',
-    overflow: 'hidden',
-    ...webTransition('width'),
-  },
-
-  sidebarTablet: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    width: '100%',
-    zIndex: 20,
-    ...webTransition('width'),
-  },
-
-  sidebarClosed: {
-    width: 0,
-  },
-
-  editor: {
-    flex: 1,
-    margin: 8,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#222222',
-    backgroundColor: '#121212',
-  },
-
-  btn: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#e3e3e3',
-    borderRadius: 4,
-    paddingHorizontal: 10,
-    height: 22,
-  },
-
-  btnText: {
-    color: '#111',
-    fontWeight: 'bold',
-    fontSize: 11,
-  },
-})
