@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { SIDEBAR_WIDTH } from '@/constants/theme'
-import { colors } from '@/constants/theme'
+import { SIDEBAR_WIDTH, colors } from '@/constants/theme'
 import { webTransition } from '@/utils/styles'
 
 export default StyleSheet.create({

@@ -7,10 +7,9 @@ import {
   useWindowDimensions,
 } from 'react-native'
 import { TABLET_BREAKPOINT } from '@/constants/theme'
-import ControlBar from '@/components/ControlBar'
-import Topbar from '@/components/Topbar'
-import Sidebar from '@/components/Sidebar'
-import Editor from '@/components/Editor'
+import Topbar from '@/components/Topbar/Topbar'
+import Sidebar from '@/components/Sidebar/Sidebar'
+import Editor from '@/components/Editor/Editor'
 import styles from './index.styles'
 
 if (Platform.OS === 'android') {
@@ -35,16 +34,15 @@ const Home = () => {
 
   return (
     <View style={styles.outer}>
-      <ControlBar
-        onToggleSidebar={toggleSidebar}
-        onToggleTopbar={toggleTopbar}
-        sidebarOpen={sidebarOpen}
-        topbarOpen={topbarOpen}
-      />
       <Topbar isOpen={topbarOpen} />
       <View style={styles.content}>
         <Sidebar isOpen={sidebarOpen} isTablet={isTablet} />
-        <Editor />
+        <Editor
+          onToggleSidebar={toggleSidebar}
+          onToggleTopbar={toggleTopbar}
+          sidebarOpen={sidebarOpen}
+          topbarOpen={topbarOpen}
+        />
       </View>
     </View>
   )

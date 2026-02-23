@@ -9,5 +9,10 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
+    overflow: 'hidden',
+  },
+
+  editorContent: {
+    flex: 1,
   },
 })
