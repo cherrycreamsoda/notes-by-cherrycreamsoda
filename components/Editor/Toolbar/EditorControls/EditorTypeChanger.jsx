@@ -1,0 +1,106 @@
+import { useState, useRef, useCallback } from 'react'
+import { View, TouchableOpacity, Modal, TouchableWithoutFeedback, Platform } from 'react-native'
+import Icon from '@/components/Icon/Icon'
+import styles from './EditorTypeChanger.styles'
+
+const ICON_SIZE = 24
+const ICON_COLOR = '#474747'
+const ICON_COLOR_SELECTED = '#ffffff'
+const DROPDOWN_GAP = 6
+
+const editorTypes = [
+  { icon: 'simpleText', label: 'Simple Text' },
+  { icon: 'richText', label: 'Rich Text' },
+  { icon: 'listTodo', label: 'List' },
+  { icon: 'alarm', label: 'Reminders' },
+  { icon: 'tableCells', label: 'Table' },
+]
+
+let createPortal
+if (Platform.OS === 'web') {
+  createPortal = require('react-dom').createPortal
+}
+
+const EditorTypeChanger = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 })
+  const triggerRef = useRef(null)
+
+  const selectedIconName = editorTypes[selectedIndex].icon
+
+  const openDropdown = useCallback(() => {
+    const node = triggerRef.current
+    if (!node) return
+
+    if (Platform.OS === 'web') {
+      const rect = node.getBoundingClientRect()
+      setDropdownPos({ top: rect.bottom + DROPDOWN_GAP, left: rect.left })
+      setDropdownOpen(true)
+    } else {
+      node.measureInWindow((x, y, width, height) => {
+        setDropdownPos({ top: y + height + DROPDOWN_GAP, left: x })
+        setDropdownOpen(true)
+      })
+    }
+  }, [])
+
+  const handleSelect = (index) => {
+    setSelectedIndex(index)
+    setDropdownOpen(false)
+  }
+
+  const dropdownContent = (
+    <View style={[styles.dropdown, { top: dropdownPos.top, left: dropdownPos.left }]}>
+      {editorTypes.map((item, index) => {
+        const isSelected = index === selectedIndex
+        return (
+          <TouchableOpacity
+            key={index}
+            style={[styles.dropdownItem, isSelected && styles.dropdownItemSelected]}
+            onPress={() => handleSelect(index)}
+          >
+            <Icon name={item.icon} size={ICON_SIZE} color={isSelected ? ICON_COLOR_SELECTED : ICON_COLOR} />
+          </TouchableOpacity>
+        )
+      })}
+    </View>
+  )
+
+  const renderDropdown = () => {
+    if (!dropdownOpen) return null
+
+    if (Platform.OS === 'web') {
+      return createPortal(dropdownContent, document.body)
+    }
+
+    return (
+      <Modal transparent visible animationType="fade" onRequestClose={() => setDropdownOpen(false)}>
+        <TouchableWithoutFeedback onPress={() => setDropdownOpen(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              {dropdownContent}
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    )
+  }
+
+  return (
+    <View style={styles.wrapper}>
+      <TouchableOpacity
+        ref={triggerRef}
+        style={styles.trigger}
+        onPress={() => dropdownOpen ? setDropdownOpen(false) : openDropdown()}
+      >
+        <Icon name={selectedIconName} size={ICON_SIZE} color={ICON_COLOR} />
+        <View style={styles.arrow} />
+      </TouchableOpacity>
+
+      {renderDropdown()}
+    </View>
+  )
+}
+
+export default EditorTypeChanger

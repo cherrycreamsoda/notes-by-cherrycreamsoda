@@ -1,22 +1,14 @@
-import { StyleSheet } from 'react-native'
-import { EDITOR_TOOLBAR_BOTTOM_ROW, colors } from '@/constants/theme'
+import { StyleSheet, Platform } from 'react-native'
+import { colors } from '@/constants/theme'
 
 export default StyleSheet.create({
-  container: {
-    height: EDITOR_TOOLBAR_BOTTOM_ROW,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 9,
-    paddingBottom: 8,
-    paddingTop: 0,
-    gap: 8,
-  },
-
-  dropdownWrapper: {
+  wrapper: {
     position: 'relative',
+    zIndex: 50,
+    overflow: 'visible',
   },
 
-  dropdownTrigger: {
+  trigger: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
@@ -39,23 +31,27 @@ export default StyleSheet.create({
   },
 
   dropdown: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
+    position: Platform.OS === 'web' ? 'fixed' : 'absolute',
     flexDirection: 'row',
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 6,
     padding: 4,
-    zIndex: 50,
+    zIndex: 9999,
     gap: 2,
   },
 
   dropdownItem: {
     padding: 6,
+    borderRadius: 4,
   },
 
-  iconBtn: {
+  dropdownItemSelected: {
+    backgroundColor: colors.border,
+  },
+
+  modalOverlay: {
+    flex: 1,
   },
 })
