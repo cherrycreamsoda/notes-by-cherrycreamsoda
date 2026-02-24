@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { SIDEBAR_WIDTH, colors } from '@/constants/theme'
+import { SIDEBAR_WIDTH, SIDEBAR_COLLAPSED_WIDTH, colors } from '@/constants/theme'
 import { webTransition } from '@/utils/styles'
 
 export default StyleSheet.create({
@@ -11,7 +11,7 @@ export default StyleSheet.create({
     ...webTransition('width'),
   },
 
-  sidebarTablet: {
+  sidebarMobile: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -20,7 +20,15 @@ export default StyleSheet.create({
     zIndex: 20,
   },
 
-  sidebarClosed: {
+  sidebarClosedDesktop: {
+    width: SIDEBAR_COLLAPSED_WIDTH,
+  },
+
+  sidebarClosedTablet: {
+    width: 0,
+  },
+
+  sidebarClosedMobile: {
     width: 0,
   },
 })
