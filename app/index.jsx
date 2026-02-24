@@ -17,8 +17,8 @@ if (Platform.OS === 'android') {
 }
 
 const Home = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [topbarOpen, setTopbarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [topbarOpen, setTopbarOpen] = useState(true)
   const { width } = useWindowDimensions()
   const isMobile = width <= MOBILE_BREAKPOINT
   const isTablet = width > MOBILE_BREAKPOINT && width <= TABLET_BREAKPOINT
@@ -43,6 +43,7 @@ const Home = () => {
           onToggleTopbar={toggleTopbar}
           sidebarOpen={sidebarOpen}
           topbarOpen={topbarOpen}
+          fileName="newmarkdown.md"
         />
       </View>
     </View>

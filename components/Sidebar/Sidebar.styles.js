@@ -24,11 +24,7 @@ export default StyleSheet.create({
     width: SIDEBAR_COLLAPSED_WIDTH,
   },
 
-  sidebarClosedTablet: {
-    width: 0,
-  },
-
-  sidebarClosedMobile: {
+  sidebarClosedCompact: {
     width: 0,
   },
 })

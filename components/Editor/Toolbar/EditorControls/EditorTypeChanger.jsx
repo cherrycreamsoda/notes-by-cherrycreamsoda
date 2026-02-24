@@ -1,11 +1,9 @@
 import { useState, useRef, useCallback } from 'react'
 import { View, TouchableOpacity, Modal, TouchableWithoutFeedback, Platform } from 'react-native'
 import Icon from '@/components/Icon/Icon'
+import { ICON_SIZE, ICON_COLOR, ICON_COLOR_SELECTED } from '@/constants/theme'
 import styles from './EditorTypeChanger.styles'
 
-const ICON_SIZE = 24
-const ICON_COLOR = '#474747'
-const ICON_COLOR_SELECTED = '#ffffff'
 const DROPDOWN_GAP = 6
 
 const editorTypes = [

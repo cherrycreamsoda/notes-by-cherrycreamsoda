@@ -1,8 +1,6 @@
 import { TouchableOpacity } from 'react-native'
 import Icon from '@/components/Icon/Icon'
-
-const ICON_SIZE = 24
-const ICON_COLOR = '#474747'
+import { ICON_SIZE, ICON_COLOR } from '@/constants/theme'
 
 const SidebarToggle = ({ onPress, isOpen }) => {
   return (

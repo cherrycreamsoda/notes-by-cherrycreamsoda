@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { EDITOR_TOOLBAR_TOP_ROW } from '@/constants/theme'
+import { EDITOR_TOOLBAR_TOP_ROW, colors } from '@/constants/theme'
 
 export default StyleSheet.create({
   container: {
@@ -15,6 +15,19 @@ export default StyleSheet.create({
     alignItems: 'center',
     gap: 7,
     paddingTop: 2,
+  },
+
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 8,
+  },
+
+  fileName: {
+    color: colors.textMuted,
+    fontSize: 13,
+    userSelect: 'none',
   },
 
   right: {

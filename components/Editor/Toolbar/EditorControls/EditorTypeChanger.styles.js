@@ -1,5 +1,5 @@
 import { StyleSheet, Platform } from 'react-native'
-import { colors } from '@/constants/theme'
+import { colors, ICON_COLOR } from '@/constants/theme'
 
 export default StyleSheet.create({
   wrapper: {
@@ -27,7 +27,7 @@ export default StyleSheet.create({
     borderTopWidth: 5,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderTopColor: '#474747',
+    borderTopColor: ICON_COLOR,
   },
 
   dropdown: {

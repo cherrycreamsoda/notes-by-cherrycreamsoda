@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import EditorToolbar from './Toolbar/EditorToolbar'
 import styles from './Editor.styles'
 
-const Editor = ({ onToggleSidebar, onToggleTopbar, sidebarOpen, topbarOpen }) => {
+const Editor = ({ onToggleSidebar, onToggleTopbar, sidebarOpen, topbarOpen, fileName }) => {
   return (
     <View style={styles.editor}>
       <EditorToolbar
@@ -10,6 +10,7 @@ const Editor = ({ onToggleSidebar, onToggleTopbar, sidebarOpen, topbarOpen }) =>
         onToggleTopbar={onToggleTopbar}
         sidebarOpen={sidebarOpen}
         topbarOpen={topbarOpen}
+        fileName={fileName}
       />
       <View style={styles.editorContent} />
     </View>

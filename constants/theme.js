@@ -12,4 +12,12 @@ export const colors = {
   background: '#111111',
   surface:    '#121212',
   border:     '#222222',
+  textMuted:  '#3a3a3a',
 }
+
+// Icon defaults
+export const ICON_SIZE = 24
+export const ICON_COLOR = '#474747'
+export const ICON_COLOR_SELECTED = '#ffffff'
+export const ICON_COLOR_ACTIVE_PIN = '#ffe600'
+export const ICON_COLOR_DANGER = '#a40000'

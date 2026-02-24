@@ -1,7 +1,8 @@
 import Svg, { Path, Rect } from 'react-native-svg'
 import icons from './icons'
+import { ICON_SIZE, ICON_COLOR } from '@/constants/theme'
 
-const renderElement = (el, index, color, strokeWidth) => {
+const renderElement = (el, index) => {
   if (el.tag === 'path') {
     return (
       <Path
@@ -29,7 +30,7 @@ const renderElement = (el, index, color, strokeWidth) => {
   return null
 }
 
-const Icon = ({ name, size = 24, color = '#474747' }) => {
+const Icon = ({ name, size = ICON_SIZE, color = ICON_COLOR }) => {
   const icon = icons[name]
   if (!icon) return null
 
@@ -46,7 +47,7 @@ const Icon = ({ name, size = 24, color = '#474747' }) => {
       strokeLinecap={isStroke ? 'round' : undefined}
       strokeLinejoin={isStroke ? 'round' : undefined}
     >
-      {icon.elements.map((el, i) => renderElement(el, i, color, icon.strokeWidth))}
+      {icon.elements.map((el, i) => renderElement(el, i))}
     </Svg>
   )
 }
