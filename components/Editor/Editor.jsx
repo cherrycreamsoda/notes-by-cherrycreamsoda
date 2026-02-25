@@ -1,12 +1,15 @@
 import { View } from 'react-native'
 import EditorToolbar from './Toolbar/EditorToolbar'
+import EditorWindow from './EditorWindow/EditorWindow'
 import styles from './Editor.styles'
 
 const Editor = ({ fileName }) => {
   return (
     <View style={styles.editor}>
       <EditorToolbar fileName={fileName} />
-      <View style={styles.editorContent} />
+      <View style={styles.editorContent}>
+        <EditorWindow />
+      </View>
     </View>
   )
 }

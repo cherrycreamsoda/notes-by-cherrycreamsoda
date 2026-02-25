@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { View } from 'react-native'
-import { useAppState } from '@/context/AppContext'
+import { useUI } from '@/context/ui'
 import ProfileIcon from './ProfileIcon'
 import DarkModeToggle from './DarkModeToggle'
 import NotificationToggle from './NotificationToggle'
@@ -8,7 +8,7 @@ import TimerButton from './TimerButton'
 import styles from './TopbarPanel.styles'
 
 const TopbarPanel = () => {
-  const { topbarOpen } = useAppState()
+  const { topbarOpen } = useUI()
   const [isDark, setIsDark] = useState(true)
   const [hasAlert, setHasAlert] = useState(false)
 

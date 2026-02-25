@@ -1,10 +1,10 @@
 import { TouchableOpacity } from 'react-native'
 import Icon from '@/components/Icon/Icon'
 import { ICON_SIZE, ICON_COLOR } from '@/constants/theme'
-import { useAppState } from '@/context/AppContext'
+import { useUI } from '@/context/ui'
 
 const TopbarToggle = () => {
-  const { topbarOpen, toggleTopbar } = useAppState()
+  const { topbarOpen, toggleTopbar } = useUI()
 
   return (
     <TouchableOpacity onPress={toggleTopbar}>

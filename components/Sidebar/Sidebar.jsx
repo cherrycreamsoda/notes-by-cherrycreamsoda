@@ -1,9 +1,9 @@
 import { View } from 'react-native'
-import { useAppState } from '@/context/AppContext'
+import { useUI } from '@/context/ui'
 import styles from './Sidebar.styles'
 
 const Sidebar = ({ isMobile, isTablet }) => {
-  const { sidebarOpen } = useAppState()
+  const { sidebarOpen } = useUI()
 
   const closedStyle = isMobile || isTablet
     ? styles.sidebarClosedCompact

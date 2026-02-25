@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, useWindowDimensions } from 'react-native'
 import { MOBILE_BREAKPOINT } from '@/constants/theme'
-import { useAppState } from '@/context/AppContext'
+import { useUI } from '@/context/ui'
 import styles from './SidebarPanel.styles'
 
 const NAV_ITEMS = [
@@ -11,7 +11,7 @@ const NAV_ITEMS = [
 ]
 
 const SidebarPanel = () => {
-  const { sidebarOpen } = useAppState()
+  const { sidebarOpen } = useUI()
   const { width: windowWidth } = useWindowDimensions()
   const isMobile = windowWidth <= MOBILE_BREAKPOINT
   const [selectedKey, setSelectedKey] = useState('all')

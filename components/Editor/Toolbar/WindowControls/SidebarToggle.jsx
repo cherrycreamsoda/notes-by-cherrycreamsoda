@@ -1,10 +1,10 @@
 import { TouchableOpacity } from 'react-native'
 import Icon from '@/components/Icon/Icon'
 import { ICON_SIZE, ICON_COLOR } from '@/constants/theme'
-import { useAppState } from '@/context/AppContext'
+import { useUI } from '@/context/ui'
 
 const SidebarToggle = () => {
-  const { sidebarOpen, toggleSidebar } = useAppState()
+  const { sidebarOpen, toggleSidebar } = useUI()
 
   return (
     <TouchableOpacity onPress={toggleSidebar}>

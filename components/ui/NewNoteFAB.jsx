@@ -1,7 +1,8 @@
 import { useRef, useEffect } from 'react'
 import { Animated, TouchableOpacity, useWindowDimensions } from 'react-native'
 import { TABLET_BREAKPOINT } from '@/constants/theme'
-import { useAppState } from '@/context/AppContext'
+import { useUI } from '@/context/ui'
+import { useNotes } from '@/context/notes'
 import Icon from '@/components/Icon/Icon'
 import styles, {
   COMPACT,
@@ -15,7 +16,13 @@ const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity)
 const DURATION = 200
 
 const NewNoteFAB = () => {
-  const { topbarOpen, sidebarOpen, noteOpen, openNote } = useAppState()
+  const { topbarOpen, sidebarOpen, noteOpen, openNotePane } = useUI()
+  const { addNote } = useNotes()
+
+  const createNote = () => {
+    addNote()
+    openNotePane()
+  }
   const { width } = useWindowDimensions()
 
   const isDesktop = width > TABLET_BREAKPOINT
@@ -62,7 +69,7 @@ const NewNoteFAB = () => {
 
     return (
       <AnimatedTouchable
-        onPress={openNote}
+        onPress={createNote}
         activeOpacity={0.7}
         style={[
           styles.fab,
@@ -89,7 +96,7 @@ const NewNoteFAB = () => {
 
   return (
     <AnimatedTouchable
-      onPress={openNote}
+      onPress={createNote}
       activeOpacity={0.7}
       style={[
         styles.fab,

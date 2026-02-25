@@ -1,10 +1,10 @@
 import { View, Text, useWindowDimensions } from 'react-native'
 import { TABLET_BREAKPOINT } from '@/constants/theme'
-import { useAppState } from '@/context/AppContext'
+import { useUI } from '@/context/ui'
 import styles from './Logo.styles'
 
 const Logo = () => {
-  const { sidebarOpen, topbarOpen } = useAppState()
+  const { sidebarOpen, topbarOpen } = useUI()
   const { width } = useWindowDimensions()
   const isDesktop = width > TABLET_BREAKPOINT
 

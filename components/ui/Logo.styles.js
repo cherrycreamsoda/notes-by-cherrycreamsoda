@@ -5,7 +5,7 @@ import {
   TOPBAR_HEIGHT,
   ICON_COLOR
 } from '@/constants/theme'
-import { webTransition } from '@/utils/styles'
+import { webTransition } from '@/utils/animation'
 
 // FAB is 40px tall at top:0, logo sits below it with a small gap
 const FAB_SIZE = 40

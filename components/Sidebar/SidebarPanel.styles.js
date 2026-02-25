@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { SIDEBAR_WIDTH, TOPBAR_HEIGHT, colors } from '@/constants/theme'
-import { webTransition } from '@/utils/styles'
+import { webTransition } from '@/utils/animation'
 
 export default StyleSheet.create({
   panel: {
