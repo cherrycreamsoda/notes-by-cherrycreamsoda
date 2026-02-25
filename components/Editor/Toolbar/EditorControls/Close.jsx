@@ -2,13 +2,15 @@ import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import Icon from '@/components/Icon/Icon'
 import { ICON_SIZE, ICON_COLOR, ICON_COLOR_DANGER } from '@/constants/theme'
+import { useAppState } from '@/context/AppContext'
 
-const Close = ({ onPress }) => {
+const Close = () => {
+  const { closeNote } = useAppState()
   const [hovered, setHovered] = useState(false)
 
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={closeNote}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >

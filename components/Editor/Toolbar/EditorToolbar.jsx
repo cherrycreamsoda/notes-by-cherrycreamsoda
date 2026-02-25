@@ -3,16 +3,10 @@ import WindowControls from './WindowControls/WindowControls'
 import EditorControls from './EditorControls/EditorControls'
 import styles from './EditorToolbar.styles'
 
-const EditorToolbar = ({ onToggleSidebar, onToggleTopbar, sidebarOpen, topbarOpen, fileName }) => {
+const EditorToolbar = ({ fileName }) => {
   return (
     <View style={styles.toolbar}>
-      <WindowControls
-        onToggleSidebar={onToggleSidebar}
-        onToggleTopbar={onToggleTopbar}
-        sidebarOpen={sidebarOpen}
-        topbarOpen={topbarOpen}
-        fileName={fileName}
-      />
+      <WindowControls fileName={fileName} />
       <EditorControls />
     </View>
   )

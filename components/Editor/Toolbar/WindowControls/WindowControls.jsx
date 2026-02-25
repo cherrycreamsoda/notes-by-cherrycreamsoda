@@ -1,7 +1,7 @@
-import { View } from 'react-native'
+import { View, useWindowDimensions } from 'react-native'
+import { MOBILE_BREAKPOINT } from '@/constants/theme'
 import SidebarToggle from './SidebarToggle'
 import TopbarToggle from './TopbarToggle'
-import ImportFile from './ImportFile'
 import ExportFile from './ExportFile'
 import LockToggle from './LockToggle'
 import PinToggle from './PinToggle'
@@ -9,19 +9,21 @@ import Delete from './Delete'
 import FileName from './FileName'
 import styles from './WindowControls.styles'
 
-const WindowControls = ({ onToggleSidebar, onToggleTopbar, sidebarOpen, topbarOpen, fileName }) => {
+const WindowControls = ({ fileName }) => {
+  const { width } = useWindowDimensions()
+  const isMobile = width <= MOBILE_BREAKPOINT
+
   return (
     <View style={styles.container}>
       <View style={styles.left}>
-        <SidebarToggle onPress={onToggleSidebar} isOpen={sidebarOpen} />
-        <TopbarToggle onPress={onToggleTopbar} isOpen={topbarOpen} />
+        <SidebarToggle />
+        <TopbarToggle />
       </View>
 
       <FileName name={fileName} />
 
       <View style={styles.right}>
-        <ImportFile />
-        <ExportFile />
+        {!isMobile && <ExportFile />}
         <LockToggle />
         <PinToggle />
         <Delete />

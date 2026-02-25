@@ -13,6 +13,9 @@ export const colors = {
   surface:    '#121212',
   border:     '#222222',
   textMuted:  '#3a3a3a',
+  textDim:    '#666666',
+  textPrimary:'#cccccc',
+  alert:      '#FF3B6F',
 }
 
 // Icon defaults

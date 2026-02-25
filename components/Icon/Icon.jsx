@@ -2,7 +2,15 @@ import Svg, { Path, Rect } from 'react-native-svg'
 import icons from './icons'
 import { ICON_SIZE, ICON_COLOR } from '@/constants/theme'
 
-const renderElement = (el, index) => {
+const renderElement = (el, index, color) => {
+  // Per-element overrides (used by mixed fill/stroke icons like timer)
+  const overrides = {}
+  if (el.fill !== undefined) overrides.fill = el.fill === 'color' ? color : el.fill
+  if (el.stroke !== undefined) overrides.stroke = el.stroke === 'color' ? color : el.stroke
+  if (el.strokeWidth !== undefined) overrides.strokeWidth = el.strokeWidth
+  if (el.strokeLinecap !== undefined) overrides.strokeLinecap = el.strokeLinecap
+  if (el.strokeLinejoin !== undefined) overrides.strokeLinejoin = el.strokeLinejoin
+
   if (el.tag === 'path') {
     return (
       <Path
@@ -10,6 +18,7 @@ const renderElement = (el, index) => {
         d={el.d}
         fillRule={el.fillRule}
         clipRule={el.clipRule}
+        {...overrides}
       />
     )
   }
@@ -23,6 +32,7 @@ const renderElement = (el, index) => {
         width={el.width}
         height={el.height}
         rx={el.rx}
+        {...overrides}
       />
     )
   }
@@ -47,7 +57,7 @@ const Icon = ({ name, size = ICON_SIZE, color = ICON_COLOR }) => {
       strokeLinecap={isStroke ? 'round' : undefined}
       strokeLinejoin={isStroke ? 'round' : undefined}
     >
-      {icon.elements.map((el, i) => renderElement(el, i))}
+      {icon.elements.map((el, i) => renderElement(el, i, color))}
     </Svg>
   )
 }
