@@ -23,8 +23,8 @@ export default StyleSheet.create({
 
   // ── desktop position ─────────────────────────────────
   desktopPosition: {
-    top: 8,
-    left: 8,
+    top: 10,
+    left: 9,
   },
 
   // ── compact (tablet / mobile) ────────────────────────

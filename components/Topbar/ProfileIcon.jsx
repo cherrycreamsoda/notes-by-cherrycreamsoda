@@ -2,13 +2,13 @@ import { View, Platform, StyleSheet } from 'react-native'
 
 const PROFILE_SIZE = 26
 
-const GRADIENT_STOPS = '#7fffd4, #84f985, #89f336, #c4df46, #ffcb56, #f3d58e, #7fffd4'
+const GRADIENT = 'repeating-linear-gradient(45deg, #740000, #690000 4px, #570000 8px, #4f0000 12px)'
 
 const ProfileIcon = ({ size = PROFILE_SIZE }) => {
   const gradientStyle =
     Platform.OS === 'web'
-      ? { background: `conic-gradient(${GRADIENT_STOPS})` }
-      : { backgroundColor: '#498d7c' }
+      ? { background: GRADIENT }
+      : { backgroundColor: '#606dbc' }
 
   return (
     <View
@@ -23,7 +23,7 @@ const ProfileIcon = ({ size = PROFILE_SIZE }) => {
 
 const styles = StyleSheet.create({
   circle: {
-    borderWidth: 1.5,
+    borderWidth: 2,
     borderColor: '#e3e3e3',
   },
 })

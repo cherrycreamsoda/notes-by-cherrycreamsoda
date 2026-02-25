@@ -21,7 +21,7 @@ export default StyleSheet.create({
   inner: {
     flex: 1,
     paddingLeft: 8,
-    paddingTop: 16,
+    paddingTop: 20,
     paddingBottom: 8,
     gap: 8,
   },
