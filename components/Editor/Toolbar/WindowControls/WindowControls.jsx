@@ -9,7 +9,7 @@ import Delete from './Delete'
 import FileName from './FileName'
 import styles from './WindowControls.styles'
 
-const WindowControls = ({ fileName }) => {
+const WindowControls = () => {
   const { width } = useWindowDimensions()
   const isMobile = width <= MOBILE_BREAKPOINT
 
@@ -20,7 +20,7 @@ const WindowControls = ({ fileName }) => {
         <TopbarToggle />
       </View>
 
-      <FileName name={fileName} />
+      <FileName />
 
       <View style={styles.right}>
         {!isMobile && <ExportFile />}

@@ -3,10 +3,10 @@ import EditorToolbar from './Toolbar/EditorToolbar'
 import EditorWindow from './EditorWindow/EditorWindow'
 import styles from './Editor.styles'
 
-const Editor = ({ fileName }) => {
+const Editor = () => {
   return (
     <View style={styles.editor}>
-      <EditorToolbar fileName={fileName} />
+      <EditorToolbar />
       <View style={styles.editorContent}>
         <EditorWindow />
       </View>

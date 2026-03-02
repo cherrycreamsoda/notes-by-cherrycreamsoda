@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useMemo } from 'react'
 import {
   createNote as createNoteObject,
+  createImportedNote,
   applyNoteUpdate,
   removeNote,
 } from '@/services/notes'
@@ -37,6 +38,13 @@ export const NotesProvider = ({ children }) => {
     setNotes(prev => applyNoteUpdate(prev, id, changes))
   }, [])
 
+  const importNote = useCallback((fileName, content) => {
+    const note = createImportedNote(fileName, content)
+    setNotes(prev => [note, ...prev])
+    setActiveNoteId(note.id)
+    return note
+  }, [])
+
   const deleteNote = useCallback((id) => {
     setNotes(prev => removeNote(prev, id))
     setActiveNoteId(prev => (prev === id ? null : prev))
@@ -62,11 +70,12 @@ export const NotesProvider = ({ children }) => {
     activeNote,
     addNote,
     updateNote,
+    importNote,
     deleteNote,
     selectNote,
   }), [
     notes, activeNote,
-    addNote, updateNote, deleteNote, selectNote,
+    addNote, updateNote, importNote, deleteNote, selectNote,
   ])
 
   return (

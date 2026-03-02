@@ -2,7 +2,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '@/constants/theme'
 import Topbar from '@/components/Topbar/Topbar'
 import TopbarPanel from '@/components/Topbar/TopbarPanel'
@@ -12,6 +12,7 @@ import Editor from '@/components/Editor/Editor'
 import MessageSpacer from '@/components/ui/MessageSpacer'
 import NewNoteFAB from '@/components/ui/NewNoteFAB'
 import Logo from '@/components/ui/Logo'
+import ImportOverlay from '@/components/ui/ImportOverlay'
 import { useUI } from '@/context/ui'
 import { useNotes } from '@/context/notes'
 import { pushKey, isTriggered, setTriggered } from '@/utils/typeaheadBuffer'
@@ -63,10 +64,86 @@ const useTypeahead = () => {
   }, [addNote, openNotePane])
 }
 
+/* ── File drag-and-drop import ───────────────────────────────── */
+
+const useFileDrop = () => {
+  const { openNotePane } = useUI()
+  const { importNote } = useNotes()
+  const [dragOver, setDragOver] = useState(false)
+  const [dragFileName, setDragFileName] = useState('')
+  const dragCounter = useRef(0)
+
+  useEffect(() => {
+    const onDragEnter = (e) => {
+      e.preventDefault()
+      dragCounter.current++
+      if (dragCounter.current === 1) {
+        setDragOver(true)
+        // Try to grab the file name from the drag event
+        const item = e.dataTransfer?.items?.[0]
+        if (item?.kind === 'file') {
+          // getAsFile() may return null during dragenter on some browsers,
+          // so we also check dataTransfer.files on drop.
+          const file = item.getAsFile?.()
+          setDragFileName(file?.name ?? 'file')
+        }
+      }
+    }
+
+    const onDragOver = (e) => {
+      e.preventDefault() // required to allow drop
+    }
+
+    const onDragLeave = (e) => {
+      e.preventDefault()
+      dragCounter.current--
+      if (dragCounter.current <= 0) {
+        dragCounter.current = 0
+        setDragOver(false)
+        setDragFileName('')
+      }
+    }
+
+    const onDrop = (e) => {
+      e.preventDefault()
+      dragCounter.current = 0
+      setDragOver(false)
+      setDragFileName('')
+
+      const file = e.dataTransfer?.files?.[0]
+      if (!file) return
+
+      // Only accept text-based files
+      const reader = new FileReader()
+      reader.onload = () => {
+        const content = reader.result
+        importNote(file.name, content)
+        openNotePane({ focusBody: true })
+      }
+      reader.readAsText(file)
+    }
+
+    window.addEventListener('dragenter', onDragEnter)
+    window.addEventListener('dragover', onDragOver)
+    window.addEventListener('dragleave', onDragLeave)
+    window.addEventListener('drop', onDrop)
+
+    return () => {
+      window.removeEventListener('dragenter', onDragEnter)
+      window.removeEventListener('dragover', onDragOver)
+      window.removeEventListener('dragleave', onDragLeave)
+      window.removeEventListener('drop', onDrop)
+    }
+  }, [importNote, openNotePane])
+
+  return { dragOver, dragFileName }
+}
+
 /* ── Home screen ────────────────────────────────────────────── */
 
 const Home = () => {
   useTypeahead()
+  const { dragOver, dragFileName } = useFileDrop()
 
   const { width } = useWindowDimensions()
   const isMobile = width <= MOBILE_BREAKPOINT
@@ -81,9 +158,10 @@ const Home = () => {
       <Logo />
       <View style={styles.content}>
         <Sidebar isMobile={isMobile} isTablet={isTablet} />
-        <Editor fileName="newmarkdown.md" />
+        <Editor />
       </View>
       <SidebarPanel />
+      <ImportOverlay visible={dragOver} fileName={dragFileName} />
     </View>
   )
 }
