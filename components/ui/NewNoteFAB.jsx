@@ -21,7 +21,7 @@ const NewNoteFAB = () => {
 
   const createNote = () => {
     addNote()
-    openNotePane()
+    openNotePane({ focusTitle: true })
   }
   const { width } = useWindowDimensions()
 

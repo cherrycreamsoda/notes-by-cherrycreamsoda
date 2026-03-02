@@ -26,6 +26,7 @@ export const createNote = (type = NOTE_TYPES.SIMPLE_TEXT) => ({
   body: '',
   pinned: false,
   locked: false,
+  deleted: false,
   createdAt: Date.now(),
   updatedAt: Date.now(),
 })

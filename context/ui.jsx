@@ -18,6 +18,7 @@ export const UIProvider = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [topbarOpen, setTopbarOpen] = useState(true)
   const [noteOpen, setNoteOpen] = useState(false)
+  const [focusTitle, setFocusTitle] = useState(false)
 
   const toggleSidebar = useCallback(() => {
     animate()
@@ -29,17 +30,22 @@ export const UIProvider = ({ children }) => {
     setTopbarOpen(prev => !prev)
   }, [])
 
-  const openNotePane  = useCallback(() => setNoteOpen(true), [])
+  const openNotePane  = useCallback((opts = {}) => {
+    setNoteOpen(true)
+    if (opts.focusTitle) setFocusTitle(true)
+  }, [])
   const closeNotePane = useCallback(() => setNoteOpen(false), [])
 
   const value = useMemo(() => ({
     sidebarOpen,
     topbarOpen,
     noteOpen,
+    focusTitle,
     toggleSidebar,
     toggleTopbar,
     openNotePane,
     closeNotePane,
+    setFocusTitle,
   }), [
     sidebarOpen, topbarOpen, noteOpen,
     toggleSidebar, toggleTopbar, openNotePane, closeNotePane,
