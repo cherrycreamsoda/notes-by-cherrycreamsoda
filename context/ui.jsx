@@ -51,8 +51,9 @@ export const UIProvider = ({ children }) => {
     setFocusTitle,
     setFocusBody,
   }), [
-    sidebarOpen, topbarOpen, noteOpen,
+    sidebarOpen, topbarOpen, noteOpen, focusTitle, focusBody,
     toggleSidebar, toggleTopbar, openNotePane, closeNotePane,
+    setFocusTitle, setFocusBody,
   ])
 
   return (

@@ -76,6 +76,61 @@ export const toFileName = (note) => {
   return `${toPascalCase(note.title)}.${ext}`
 }
 
+/* ── Metadata serialization ─────────────────────────────────── */
+
+const META_SEPARATOR = '\n\n---\n'
+const META_PREFIX    = '[notesByCherryCreamSoda]'
+
+/**
+ * Serialize note metadata into a footer block appended to file content.
+ *
+ * Format (last lines of the exported file):
+ *   ---
+ *   [notesByCherryCreamSoda]
+ *   locked: true
+ *   pinned: false
+ *   type: simpletext
+ *   created: 1709337600000
+ */
+const serializeMetadata = (note) => {
+  const lines = [
+    META_PREFIX,
+    `locked: ${!!note.locked}`,
+    `pinned: ${!!note.pinned}`,
+    `type: ${note.type}`,
+    `created: ${note.createdAt}`,
+  ]
+  return META_SEPARATOR + lines.join('\n')
+}
+
+/**
+ * Parse metadata from the footer block of imported file content.
+ * Returns { body, meta } where meta contains the parsed flags
+ * (or defaults if no footer is found).
+ */
+export const parseMetadata = (raw) => {
+  const idx = raw.lastIndexOf(META_SEPARATOR)
+  if (idx === -1 || !raw.includes(META_PREFIX)) {
+    return { body: raw, meta: null }
+  }
+
+  const body = raw.slice(0, idx)
+  const block = raw.slice(idx + META_SEPARATOR.length)
+  const meta = {}
+
+  for (const line of block.split('\n')) {
+    const match = line.match(/^(\w+):\s*(.+)$/)
+    if (!match) continue
+    const [, key, val] = match
+    if (val === 'true')       meta[key] = true
+    else if (val === 'false') meta[key] = false
+    else if (/^\d+$/.test(val)) meta[key] = Number(val)
+    else                      meta[key] = val
+  }
+
+  return { body, meta }
+}
+
 /**
  * Build an exportable representation of a note.
  * This is the single place to extend when we add new formats.
@@ -87,7 +142,7 @@ export const getExportData = (note) => {
   if (!note) return null
   return {
     fileName: toFileName(note),
-    content: note.body ?? '',
+    content: (note.body ?? '') + serializeMetadata(note),
     mimeType: 'text/plain',
   }
 }
@@ -130,14 +185,26 @@ export const fileNameToTitle = (fileName) => {
 
 /**
  * Create a fully-populated note object from an imported file.
+ * If the file contains a notesByCherryCreamSoda metadata footer,
+ * locked / pinned / type / created values are restored.
  *
  * @param {string} fileName  The original file name (e.g. "my File.txt")
- * @param {string} content   The file's text content
+ * @param {string} rawContent   The file's full text content
  * @returns {object}         A note ready to be stored in state
  */
-export const createImportedNote = (fileName, content) => {
-  const note = createNote(NOTE_TYPES.SIMPLE_TEXT)
+export const createImportedNote = (fileName, rawContent) => {
+  const { body, meta } = parseMetadata(rawContent)
+  const type = meta?.type ?? NOTE_TYPES.SIMPLE_TEXT
+  const note = createNote(type)
   note.title = fileNameToTitle(fileName)
-  note.body = content
+  note.body = body
+
+  // Restore metadata flags when present
+  if (meta) {
+    if (typeof meta.locked === 'boolean') note.locked = meta.locked
+    if (typeof meta.pinned === 'boolean') note.pinned = meta.pinned
+    if (typeof meta.created === 'number') note.createdAt = meta.created
+  }
+
   return note
 }

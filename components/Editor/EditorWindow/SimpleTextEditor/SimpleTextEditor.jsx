@@ -17,9 +17,9 @@ const SimpleTextEditor = () => {
     if (!activeNote || hasFlushed.current) return
     hasFlushed.current = true
 
-    const buffered = flush()
-    if (buffered) {
-      updateNote(activeNote.id, { body: buffered })
+    const { text, target } = flush()
+    if (text) {
+      updateNote(activeNote.id, { [target]: text })
     }
   }, [activeNote])
 

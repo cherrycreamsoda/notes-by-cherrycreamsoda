@@ -1,6 +1,7 @@
 import {
   View,
   useWindowDimensions,
+  Platform,
 } from 'react-native'
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '@/constants/theme'
@@ -29,6 +30,8 @@ const useTypeahead = () => {
   useEffect(() => { noteOpenRef.current = noteOpen }, [noteOpen])
 
   useEffect(() => {
+    if (Platform.OS !== 'web') return   // keyboard events are web-only
+
     const handleKeyDown = (e) => {
       // Never intercept when a modifier key is held
       if (e.ctrlKey || e.altKey || e.metaKey) return
@@ -49,7 +52,7 @@ const useTypeahead = () => {
         pushKey(e.key)
         setTriggered()
         addNote()
-        openNotePane({ focusBody: true })
+        openNotePane({ focusTitle: true })
       } else {
         // Note creation already triggered — keep buffering printable chars
         if (e.key.length === 1) {
@@ -74,6 +77,8 @@ const useFileDrop = () => {
   const dragCounter = useRef(0)
 
   useEffect(() => {
+    if (Platform.OS !== 'web') return   // drag-and-drop is web/desktop only
+
     const onDragEnter = (e) => {
       e.preventDefault()
       dragCounter.current++
