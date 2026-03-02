@@ -19,6 +19,7 @@ export const UIProvider = ({ children }) => {
   const [topbarOpen, setTopbarOpen] = useState(true)
   const [noteOpen, setNoteOpen] = useState(false)
   const [focusTitle, setFocusTitle] = useState(false)
+  const [focusBody, setFocusBody] = useState(false)
 
   const toggleSidebar = useCallback(() => {
     animate()
@@ -30,9 +31,10 @@ export const UIProvider = ({ children }) => {
     setTopbarOpen(prev => !prev)
   }, [])
 
-  const openNotePane  = useCallback((opts = {}) => {
+  const openNotePane = useCallback((opts = {}) => {
     setNoteOpen(true)
     if (opts.focusTitle) setFocusTitle(true)
+    if (opts.focusBody) setFocusBody(true)
   }, [])
   const closeNotePane = useCallback(() => setNoteOpen(false), [])
 
@@ -41,11 +43,13 @@ export const UIProvider = ({ children }) => {
     topbarOpen,
     noteOpen,
     focusTitle,
+    focusBody,
     toggleSidebar,
     toggleTopbar,
     openNotePane,
     closeNotePane,
     setFocusTitle,
+    setFocusBody,
   }), [
     sidebarOpen, topbarOpen, noteOpen,
     toggleSidebar, toggleTopbar, openNotePane, closeNotePane,

@@ -1,26 +1,52 @@
+import { useRef, useEffect } from 'react'
 import { View, TextInput } from 'react-native'
 import { useNotes } from '@/context/notes'
 import { useUI } from '@/context/ui'
-import { useRef, useEffect } from 'react'
+import { flush } from '@/utils/typeaheadBuffer'
 import styles from './SimpleTextEditor.styles'
 
 const SimpleTextEditor = () => {
   const { activeNote, updateNote } = useNotes()
-  const { focusTitle, setFocusTitle } = useUI()
+  const { focusTitle, setFocusTitle, focusBody, setFocusBody } = useUI()
   const titleRef = useRef(null)
   const bodyRef = useRef(null)
+  const hasFlushed = useRef(false)
 
-  if (!activeNote) return null
+  /* ── Flush typeahead buffer on mount ─────────────────────── */
+  useEffect(() => {
+    if (!activeNote || hasFlushed.current) return
+    hasFlushed.current = true
 
-  const handleTitleChange = (text) => updateNote(activeNote.id, { title: text })
-  const handleBodyChange = (text) => updateNote(activeNote.id, { body: text })
+    const buffered = flush()
+    if (buffered) {
+      updateNote(activeNote.id, { body: buffered })
+    }
+  }, [activeNote])
 
+  /* ── Focus handling ──────────────────────────────────────── */
   useEffect(() => {
     if (focusTitle) {
       titleRef.current?.focus()
       setFocusTitle(false)
     }
-  }, [focusTitle, setFocusTitle])
+  }, [focusTitle])
+
+  useEffect(() => {
+    if (focusBody) {
+      bodyRef.current?.focus()
+      setFocusBody(false)
+    }
+  }, [focusBody])
+
+  /* Reset hasFlushed when note changes */
+  useEffect(() => {
+    hasFlushed.current = false
+  }, [activeNote?.id])
+
+  if (!activeNote) return null
+
+  const handleTitleChange = (text) => updateNote(activeNote.id, { title: text })
+  const handleBodyChange = (text) => updateNote(activeNote.id, { body: text })
 
   return (
     <View style={styles.container}>
