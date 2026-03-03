@@ -6,7 +6,13 @@
  * easy to test, reuse, and eventually back with a real API or DB.
  */
 
-let nextId = 1
+/**
+ * Generate a short, unique, filesystem-safe ID.
+ * Format: base36 timestamp + random suffix (~14 chars).
+ * Collision-proof for single-device use; sortable by creation time.
+ */
+export const generateId = () =>
+  Date.now().toString(36) + Math.random().toString(36).slice(2, 7)
 
 /** All available note types. Extend this as new editors are added. */
 export const NOTE_TYPES = {
@@ -20,7 +26,7 @@ export const NOTE_TYPES = {
  * @returns {object}     A new note ready to be stored in state.
  */
 export const createNote = (type = NOTE_TYPES.SIMPLE_TEXT) => ({
-  id: String(nextId++),
+  id: generateId(),
   type,
   title: '',
   body: '',
@@ -95,10 +101,14 @@ const META_PREFIX    = '[notesByCherryCreamSoda]'
 const serializeMetadata = (note) => {
   const lines = [
     META_PREFIX,
+    `id: ${note.id}`,
+    `title: ${note.title || ''}`,
     `locked: ${!!note.locked}`,
     `pinned: ${!!note.pinned}`,
+    `deleted: ${!!note.deleted}`,
     `type: ${note.type}`,
     `created: ${note.createdAt}`,
+    `updated: ${note.updatedAt}`,
   ]
   return META_SEPARATOR + lines.join('\n')
 }
@@ -207,4 +217,38 @@ export const createImportedNote = (fileName, rawContent) => {
   }
 
   return note
+}
+
+/* ── Persistence helpers ────────────────────────────────────── */
+
+/**
+ * Serialize a note into file content (body + metadata footer).
+ * This is the format written to disk by the storage layer.
+ */
+export const serializeNoteToFile = (note) =>
+  (note.body ?? '') + serializeMetadata(note)
+
+/**
+ * Reconstruct a note from persisted file content.
+ * Preserves the original ID, title, and all metadata flags.
+ * Used by the storage layer on load — NOT for external imports
+ * (use createImportedNote for drag-drop / file-picker imports).
+ *
+ * @param {string} rawContent   File content (body + metadata footer)
+ * @param {string} [fallbackId] Used if the file has no id in metadata
+ * @returns {object}            A fully-populated note object
+ */
+export const hydrateNote = (rawContent, fallbackId) => {
+  const { body, meta } = parseMetadata(rawContent)
+  return {
+    id: String(meta?.id ?? fallbackId ?? generateId()),
+    type: meta?.type ?? NOTE_TYPES.SIMPLE_TEXT,
+    title: String(meta?.title ?? ''),
+    body: body ?? '',
+    pinned: meta?.pinned === true,
+    locked: meta?.locked === true,
+    deleted: meta?.deleted === true,
+    createdAt: meta?.created ?? Date.now(),
+    updatedAt: meta?.updated ?? Date.now(),
+  }
 }

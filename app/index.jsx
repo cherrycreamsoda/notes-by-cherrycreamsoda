@@ -16,6 +16,7 @@ import Logo from '@/components/ui/Logo'
 import ImportOverlay from '@/components/ui/ImportOverlay'
 import { useUI } from '@/context/ui'
 import { useNotes } from '@/context/notes'
+import { useNotifications } from '@/context/notifications'
 import { pushKey, isTriggered, setTriggered } from '@/utils/typeaheadBuffer'
 import styles from './index.styles'
 
@@ -149,6 +150,72 @@ const useFileDrop = () => {
 const Home = () => {
   useTypeahead()
   const { dragOver, dragFileName } = useFileDrop()
+  const { openNotePane, noteOpen } = useUI()
+  const { activeNote, loaded, reloadFromStorage } = useNotes()
+  const { addNotification } = useNotifications()
+
+  /* ── Restore the last-open note pane after a refresh ────── */
+  const hasRestored = useRef(false)
+  useEffect(() => {
+    if (!loaded || hasRestored.current) return
+    hasRestored.current = true
+    if (activeNote && !noteOpen) {
+      openNotePane()
+    }
+  }, [loaded])
+
+  /* ── Startup: check save-folder connection (web) ────────── */
+  const hasNotified = useRef(false)
+  useEffect(() => {
+    if (!loaded || hasNotified.current) return
+    if (Platform.OS !== 'web') return
+    hasNotified.current = true
+
+    import('@/services/storage/backend').then(backend => {
+      const hasFSA = backend.hasFileSystemAccess && backend.hasFileSystemAccess()
+      const needsRe = backend.needsReconnect && backend.needsReconnect()
+
+      if (hasFSA) return // already connected, nothing to do
+
+      if (needsRe) {
+        // Previously selected folder lost permission after reload
+        addNotification({
+          type: 'error',
+          title: 'Your previously selected folder is not connected, reconnect to continue saving notes.',
+          action: {
+            label: 'Reconnect',
+            onPress: async () => {
+              const result = await backend.requestFolderAccess()
+              if (result.granted || result.reconnected) {
+                reloadFromStorage()
+                addNotification({
+                  title: 'Save folder reconnected, your notes will continue saving to disk.',
+                })
+              }
+            },
+          },
+        })
+      } else {
+        // First time — no folder ever selected
+        addNotification({
+          type: 'error',
+          title: 'No save location selected, pick a folder to save your notes as real files.',
+          action: {
+            label: 'Choose folder',
+            onPress: async () => {
+              const result = await backend.requestFolderAccess()
+              if (result.granted || result.reconnected) {
+                reloadFromStorage()
+                addNotification({
+                  title: 'Save folder connected, your notes will now be saved to disk.',
+                })
+              }
+            },
+          },
+        })
+      }
+    })
+  }, [loaded])
 
   const { width } = useWindowDimensions()
   const isMobile = width <= MOBILE_BREAKPOINT
