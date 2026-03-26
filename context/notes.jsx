@@ -145,7 +145,7 @@ export const NotesProvider = ({ children }) => {
   /* ── Selection ─────────────────────────────────────────────── */
 
   const selectNote = useCallback((id) => {
-    if (id) setActiveNoteId(id)
+    setActiveNoteId(id ?? null)
   }, [])
 
   /* ── Reload from storage (after reconnecting to filesystem) ─ */

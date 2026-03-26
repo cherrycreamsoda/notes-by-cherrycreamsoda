@@ -37,6 +37,19 @@ export default StyleSheet.create({
   boxInner: {
   },
 
+  /* ── Small-screen: full-width panel from top ───────── */
+  topPanel: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    overflow: 'hidden',
+    backgroundColor: colors.surface,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.textMuted,
+    zIndex: 40,
+  },
+
   /* ── Notification row ──────────────────────────────── */
   row: {
     flexDirection: 'row',

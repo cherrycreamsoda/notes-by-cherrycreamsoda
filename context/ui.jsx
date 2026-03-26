@@ -36,7 +36,9 @@ export const UIProvider = ({ children }) => {
     if (opts.focusTitle) setFocusTitle(true)
     if (opts.focusBody) setFocusBody(true)
   }, [])
-  const closeNotePane = useCallback(() => setNoteOpen(false), [])
+  const closeNotePane = useCallback(() => {
+    setNoteOpen(false)
+  }, [])
 
   const value = useMemo(() => ({
     sidebarOpen,

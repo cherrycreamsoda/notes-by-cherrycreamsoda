@@ -23,7 +23,7 @@ export const NotificationsProvider = ({ children }) => {
   const [panelOpen, setPanelOpen] = useState(false)
 
   /** Add a notification. Returns the new notification's id. */
-  const addNotification = useCallback(({ type = 'info', title, body = '', action = null }) => {
+  const addNotification = useCallback(({ type = 'info', title, body = '', action = null, autoOpen = false }) => {
     const id = _nextId++
     const notification = {
       id,
@@ -35,6 +35,9 @@ export const NotificationsProvider = ({ children }) => {
       action,
     }
     setNotifications(prev => [notification, ...prev])
+    if (autoOpen || type === 'error' || type === 'alert') {
+      setPanelOpen(true)
+    }
     return id
   }, [])
 

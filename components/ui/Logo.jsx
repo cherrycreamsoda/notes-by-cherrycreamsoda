@@ -14,7 +14,7 @@ const Logo = () => {
         styles.container,
         isDesktop ? styles.containerDesktop : styles.containerCompact,
         isDesktop && sidebarOpen && styles.containerShifted,
-        !isDesktop && !topbarOpen && styles.containerTopbarClosed,
+        !isDesktop && !topbarOpen && !sidebarOpen && styles.containerTopbarClosed,
       ]}
     >
       <Text

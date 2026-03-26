@@ -5,6 +5,7 @@ export const TOPBAR_HEIGHT = 40
 export const EDITOR_TOOLBAR_TOP_ROW = 40
 export const EDITOR_TOOLBAR_BOTTOM_ROW = 35
 export const MOBILE_BREAKPOINT = 480
+export const SMALL_DESKTOP_BREAKPOINT = 860
 export const TABLET_BREAKPOINT = 1024
 
 // Colors — swap this object for light mode later

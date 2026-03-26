@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { View, TouchableOpacity, Modal, TouchableWithoutFeedback, Platform } from 'react-native'
 import Icon from '@/components/Icon/Icon'
 import { ICON_SIZE, ICON_COLOR, ICON_COLOR_SELECTED } from '@/constants/theme'
@@ -24,8 +24,25 @@ const EditorTypeChanger = () => {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 })
   const triggerRef = useRef(null)
+  const dropdownRef = useRef(null)
 
   const selectedIconName = editorTypes[selectedIndex].icon
+
+  // Close dropdown when clicking outside (web)
+  useEffect(() => {
+    if (Platform.OS !== 'web' || !dropdownOpen) return
+    const handleClick = (e) => {
+      if (
+        triggerRef.current && triggerRef.current.contains(e.target)
+      ) return
+      if (
+        dropdownRef.current && dropdownRef.current.contains(e.target)
+      ) return
+      setDropdownOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [dropdownOpen])
 
   const openDropdown = useCallback(() => {
     const node = triggerRef.current
@@ -49,7 +66,7 @@ const EditorTypeChanger = () => {
   }
 
   const dropdownContent = (
-    <View style={[styles.dropdown, { top: dropdownPos.top, left: dropdownPos.left }]}>
+    <View ref={dropdownRef} style={[styles.dropdown, { top: dropdownPos.top, left: dropdownPos.left }]}>
       {editorTypes.map((item, index) => {
         const isSelected = index === selectedIndex
         return (

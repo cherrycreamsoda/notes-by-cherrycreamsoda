@@ -61,15 +61,21 @@ export default StyleSheet.create({
     color: colors.textPrimary,
   },
 
+  navButtonDanger: {
+    backgroundColor: '#510000',
+    borderWidth: 1,
+    borderColor: '#af0000',
+  },
+
+  navButtonTextDanger: {
+    color: '#af0000',
+  },
+
   notesInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 6,
     paddingHorizontal: 10,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    marginTop: 2,
   },
 
   notesInfoLabel: {
@@ -87,5 +93,23 @@ export default StyleSheet.create({
 
   notesList: {
     flex: 1,
+  },
+
+  notesListContent: {
+    paddingTop: 4,
+    paddingBottom: 12,
+    gap: 0,
+  },
+
+  noteSeparator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
+    marginVertical: 4,
+  },
+
+  navSeparator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
+    marginVertical: 4,
   },
 })

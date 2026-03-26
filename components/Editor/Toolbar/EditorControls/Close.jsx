@@ -9,7 +9,7 @@ const isTouch = Platform.OS !== 'web'
 
 const Close = () => {
   const { closeNotePane } = useUI()
-  const { activeNote, deleteNote } = useNotes()
+  const { selectNote } = useNotes()
   const [hovered, setHovered] = useState(false)
 
   const iconColor = isTouch || hovered ? ICON_COLOR_DANGER : ICON_COLOR
@@ -17,7 +17,7 @@ const Close = () => {
   return (
     <TouchableOpacity
       onPress={() => {
-        if (activeNote) deleteNote(activeNote.id)
+        selectNote(null)
         closeNotePane()
       }}
       onMouseEnter={() => setHovered(true)}

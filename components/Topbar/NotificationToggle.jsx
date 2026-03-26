@@ -5,7 +5,7 @@ import styles from './NotificationToggle.styles'
 
 const NotificationToggle = ({ hasAlert = false, onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container} dataSet={{ notificationToggle: true }}>
       <Icon
         name={hasAlert ? 'notificationAlert' : 'notificationNormal'}
         size={ICON_SIZE}

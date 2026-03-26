@@ -4,6 +4,7 @@ import Icon from '@/components/Icon/Icon'
 import { ICON_SIZE, ICON_COLOR, ICON_COLOR_DANGER } from '@/constants/theme'
 import { useNotes } from '@/context/notes'
 import { useUI } from '@/context/ui'
+import { useNotifications } from '@/context/notifications'
 
 const isTouch = Platform.OS !== 'web'
 
@@ -11,9 +12,18 @@ const Delete = () => {
   const [hovered, setHovered] = useState(false)
   const { activeNote, updateNote } = useNotes()
   const { closeNotePane } = useUI()
+  const { addNotification } = useNotifications()
 
   const handleDelete = () => {
     if (!activeNote) return
+    if (activeNote.locked) {
+      addNotification({ type: 'error', title: 'Locked notes cannot be deleted.' })
+      return
+    }
+    if (activeNote.pinned) {
+      addNotification({ type: 'error', title: 'Pinned notes cannot be deleted. Unpin first.' })
+      return
+    }
     updateNote(activeNote.id, { deleted: true })
     closeNotePane()
   }
